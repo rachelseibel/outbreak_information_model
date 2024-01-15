@@ -1,13 +1,13 @@
 # outbreak_information_model
 
-This repository contains the code for the outbreak information model (OIM) described in the pre-print "A model for outbreak information management in public health" by [R. Seibel](https://www.imperial.ac.uk/people/s.funk), [M. Tildesley](https://www.imperial.ac.uk/people/a.camacho) and [E. Hill](https://www.imperial.ac.uk/people/a.kucharski) (2024). The model is implemented in Python 3.11.7 and can be used to simulate the spread of an infectious disease in a population given real-time awareness of intervention effectiveness. The model is described in detail in the pre-print, which can be found [here](https://www.medrxiv.org/content/10.1101/2020.04.24.20078024v1).
+This repository contains the code for the outbreak information model (OIM) described in the pre-print "A model for outbreak information management in public health" by [R. Seibel](https://warwick.ac.uk/fac/sci/mathsys/people/students/mathsysii/seibel/), [M. Tildesley](https://warwick.ac.uk/fac/sci/lifesci/people/mtildesley/) and [E. Hill](https://warwick.ac.uk/fac/sci/maths/people/staff/ed_hill/) (2024). The model is implemented in Python 3.11.7 and can be used to deterministically simulate the spread of a human infectious disease in a population given real-time awareness of intervention effectiveness. The model is described in detail in the pre-print, which can be found [medarxiv link here].
 
 ## To run the model:
 1. Clone the repository
 2. Install the required packages (pip install using requirements.txt or activate conda environment from cloned repository)
-3. Determine which population structure you want to use (homogeneous or heterogeneous) and which scenario (1 or 2) you wish to run.
-4. Open the corresponding model file (e.g. src/main_homogeneous.py) and set the file path for the parameter variable (e.g. "homogeneous/inputs/parameters_scenario1.csv")
-5. Execute the cells in the corresponding Jupyter notebook (e.g. Homogeneous.ipynb)
+3. Determine which population structure you want to use (homogeneous or heterogeneous) and which scenario (1 or 2) you wish to run. Note that some scenarios are separated into multiple files (e.g. homogeneous scenario 1 is split into 1a and 1b).
+4. Open the corresponding model file (e.g. src/main_homogeneous.py) and set the file path for the parameter variable (e.g. "homogeneous/inputs/parameters_scenario1a.csv")
+5. Execute the cells in the corresponding Jupyter notebook (e.g. Homogeneous.ipynb). Save the results to the "outputs" folder for the corresponding population structure and scenario.
 
 ## To interpret the results:
 The model outputs a number of files, which are saved in the "outputs" folder for the correponding population structure and scenario. The files are:
