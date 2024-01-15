@@ -1,7 +1,7 @@
-from memory_window import memory_window
+from memory_window import memory_window_homogeneous
 import math
 
-def SEIRV_model(t, y, df):
+def SEIRV_model_homogeneous(t, y, df):
     R0, beta, sigma, gamma, d, td, s1, s2, s3, v, pathogen, m, behaviour_function, r, alpha, vaccine_efficacy, ucases_memory, udeaths_memory, cases_memory, deaths_memory = df
 
     if (r+alpha) == 0:
@@ -126,7 +126,7 @@ def update_vaccine_uptake_rate(t, td, ucases_memory, udeaths_memory, cases_memor
 
     # if (m != 0) | (alpha != 0):
     # Memory window implementation
-    ucases, udeaths, cases, deaths, ucases_memory, udeaths_memory, cases_memory, deaths_memory = memory_window(ucases, udeaths, cases, deaths, ucases_memory, udeaths_memory, cases_memory, deaths_memory, m, t, td)
+    ucases, udeaths, cases, deaths, ucases_memory, udeaths_memory, cases_memory, deaths_memory = memory_window_homogeneous(ucases, udeaths, cases, deaths, ucases_memory, udeaths_memory, cases_memory, deaths_memory, m, t, td)
 
     # Check behaviour function
     if behaviour_function == 'cases':

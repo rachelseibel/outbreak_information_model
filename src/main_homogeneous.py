@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
-from SEIRV_model import SEIRV_model, event, new_day_event, update_vaccine_uptake_rate, alive, foi
+from SEIRV_model_homogeneous import SEIRV_model_homogeneous, event, new_day_event, update_vaccine_uptake_rate, alive, foi
 
 parameters = pd.read_csv('homogeneous/inputs/parameters_scenario1b.csv')
 
@@ -25,7 +25,7 @@ ebola = pd.read_csv('homogeneous/inputs/parameters_ebola.csv')
 influenza = pd.read_csv('homogeneous/inputs/parameters_influenza.csv')
 
 # Initialise results dataframe
-df_results = pd.DataFrame(columns=['pathogen','memory_window','behaviour_function','r','alpha','vaccine_efficacy','final_cases','final_deaths','peak_cases','peak_deaths','epidemic_duration','vaccinations_administered'])
+df_results = pd.DataFrame(columns=['pathogen','memory_window','behaviour_function','r','alpha','vaccine_efficacy','final_cases','final_deaths','final_vaccinated','epidemic_duration'])
 df_temporal = pd.DataFrame(columns=['pathogen','memory_window','behaviour_function','r','alpha','vaccine_efficacy','t','S','E','I','R','H','Sv','Ev','Iv','Rv','Hv','C','Cv'])
 
 # Run SEIRV_model over range of parameters
@@ -54,7 +54,7 @@ for i in range(len(parameters)):
     # Convert df to list by column
     df = df.values.tolist()
     # Solve the SEIRV model
-    sol = solve_ivp(SEIRV_model, [t_start, t_end], y0, t_eval=t, events=[event,new_day_event], args=df, rtol=1e-4, atol=1e-7, max_step=1)
+    sol = solve_ivp(SEIRV_model_homogeneous, [t_start, t_end], y0, t_eval=t, events=[event,new_day_event], args=df, rtol=1e-4, atol=1e-7, max_step=1)
     # Calculate simulation results and save to dataframe by pathogen and behaviour function
     df_newsim = pd.DataFrame({
         'pathogen': parameters['pathogen'][i],
@@ -65,10 +65,8 @@ for i in range(len(parameters)):
         'vaccine_efficacy': parameters['vaccine_efficacy'][i],
         'final_cases': (sol.y[10][-1]+sol.y[11][-1]),
         'final_deaths': (sol.y[4][-1]+sol.y[9][-1]),
-        'peak_cases': max(sol.y[1]+sol.y[2]+sol.y[6]+sol.y[7]),
-        'peak_deaths': max(sol.y[4]+sol.y[9]),
-        'epidemic_duration': (sol.t[-1]),
-        'vaccinations_administered': (sol.y[5][-1] + sol.y[6][-1] + sol.y[7][-1] + sol.y[8][-1] + sol.y[9][-1])
+        'final_vaccinated': (sol.y[5][-1] + sol.y[6][-1] + sol.y[7][-1] + sol.y[8][-1] + sol.y[9][-1]),
+        'epidemic_duration': (sol.t[-1])
     }, index=[i])
     df_results = pd.concat([df_results, df_newsim], axis=0)
 

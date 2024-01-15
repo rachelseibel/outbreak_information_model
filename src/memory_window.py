@@ -1,7 +1,7 @@
 import numpy as np
 from operator import add
 
-def memory_window(ucases, udeaths, cases, deaths, ucases_memory, udeaths_memory, cases_memory, deaths_memory, m, t, td):
+def memory_window_homogeneous(ucases, udeaths, cases, deaths, ucases_memory, udeaths_memory, cases_memory, deaths_memory, m, t, td):
     # Append the cases and deaths to the cases_memory and deaths_memory
     ucases_memory.append(ucases)
     cases_memory.append(cases)

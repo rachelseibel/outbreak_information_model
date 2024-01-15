@@ -40,7 +40,7 @@ ebola = pd.read_csv('heterogeneous/inputs/parameters_ebola.csv')
 influenza = pd.read_csv('heterogeneous/inputs/parameters_influenza.csv')
 
 # Initialise results dataframe
-df_results = pd.DataFrame(columns=['pathogen','split','memory_window','behaviour_function','r','alpha','vaccine_efficacy','final_cases','final_deaths','peak_cases','epidemic_duration','vaccinations_administered'])
+df_results = pd.DataFrame(columns=['pathogen','split','memory_window','behaviour_function','r','alpha','vaccine_efficacy','final_cases','final_deaths','final_vaccinated','epidemic_duration'])
 df_temporal = pd.DataFrame(columns=['pathogen','split','memory_window','behaviour_function','r','alpha','vaccine_efficacy','t','S','E','I','R','H','Sv','Ev','Iv','Rv','Hv','C','Cv'])
 
 # Run SEIRV_model over range of parameters
@@ -146,9 +146,8 @@ for i in range(len(parameters)):
         'vaccine_efficacy': parameters['vaccine_efficacy'][i],
         'final_cases': final_cases,
         'final_deaths': final_deaths,
-        'peak_cases': peak_cases,
-        'epidemic_duration': sol.t[-1],
-        'vaccinations_administered': total_vaccines
+        'final_vaccinated': total_vaccines,
+        'epidemic_duration': sol.t[-1]
     }, index=[i])
     df_results = pd.concat([df_results, df_newsim], axis=0)
 
@@ -178,54 +177,3 @@ for i in range(len(parameters)):
             'Cv': [[sol.y[33][j], sol.y[34][j], sol.y[35][j]]]
         }, index=[file_size])
         df_temporal = pd.concat([df_temporal, df_temporal_new], axis=0)
-
-
-    # # Batch the results by 1000 simulations
-    # if (i % 1000 == 0 and i != 0) or (i == len(parameters)-1):
-    #     # Save results to csv
-    #     df_temporal.to_csv(f'heterogeneous/outputs/sim3/temporal{i}.csv', index=False)
-    #     # Initialise temporal dataframe
-    #     df_temporal = pd.DataFrame(columns=['pathogen','split','memory_window','behaviour_function','r','alpha','t','S','E','I','R','D','Sv','Ev','Iv','Rv','Dv','C','Cv'])
-    # # Save temporal results to dataframe
-    # for j in range(len(sol.t)):
-    #     df_temporal_new = pd.DataFrame({
-    #         'pathogen': parameters['pathogen'][i],
-    #         'behaviour_function': parameters['behaviour_function'][i],
-    #         'r': parameters['r'][i],
-    #         'alpha': parameters['alpha'][i],
-    #         't': sol.t[j],
-    #         'S': sol.y[0][j],
-    #         'E': sol.y[1][j],
-    #         'I': sol.y[2][j],
-    #         'R': sol.y[3][j],
-    #         'D': sol.y[4][j],
-    #         'Sv': sol.y[5][j],
-    #         'Ev': sol.y[6][j],
-    #         'Iv': sol.y[7][j],
-    #         'Rv': sol.y[8][j],
-    #         'Dv': sol.y[9][j]
-    #     }, index=[file_size])
-    #     df_temporal = pd.concat([df_temporal, df_temporal_new], axis=0)
-    #     file_size += 1
-
-    # # Save temporal results to dataframe
-    # for j in range(len(sol.t)):
-    #     df_temporal_new = pd.DataFrame({
-    #         'pathogen': parameters['pathogen'][i],
-    #         'behaviour_function': parameters['behaviour_function'][i],
-    #         'r': parameters['r'][i],
-    #         'alpha': parameters['alpha'][i],
-    #         't': sol.t[j],
-    #         'S': sol.y[0][j],
-    #         'E': sol.y[1][j],
-    #         'I': sol.y[2][j],
-    #         'R': sol.y[3][j],
-    #         'D': sol.y[4][j],
-    #         'Sv': sol.y[5][j],
-    #         'Ev': sol.y[6][j],
-    #         'Iv': sol.y[7][j],
-    #         'Rv': sol.y[8][j],
-    #         'Dv': sol.y[9][j]
-    #     }, index=[file_size])
-    #     df_temporal = pd.concat([df_temporal, df_temporal_new], axis=0)
-    #     file_size += 1
