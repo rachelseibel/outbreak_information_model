@@ -167,19 +167,6 @@ def new_day_event(t, y, df):
     # Convert r from str to list
     r = np.array(r.strip(']').strip('[').split(', ')).astype(float)
 
-    # if new_day_event.previous_time==0:
-    #     new_day_event.previous_time = t
-    #     # Memory window initialisation
-    #     for i in range(len(S)):
-    #         ucases_within_memory.append([E[i] + I[i] + R[i] + H[i]])
-    #         udeaths_within_memory.append([H[i]])
-    #         cases_within_memory.append([E[i] + I[i] + R[i] + H[i] + Ev[i] + Iv[i] + Rv[i] + Hv[i]])
-    #         deaths_within_memory.append([H[i] + Hv[i]])
-    #     ucases_memory = [sum(E) + sum(I) + sum(R) + sum(H)]
-    #     udeaths_memory = [0]
-    #     cases_memory = [sum(E) + sum(I) + sum(R) + sum(H) + sum(Ev) + sum(Iv) + sum(Rv) + sum(Hv)]
-    #     deaths_memory = [0]
-
     if (math.floor(t) > math.floor(new_day_event.previous_time) | (t == 0)):
         # Update the vaccine uptake rate at beginning of new day
 

@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 from SEIRV_model_homogeneous import SEIRV_model_homogeneous, event, new_day_event, update_vaccine_uptake_rate, alive, foi
 
-parameters = pd.read_csv('homogeneous/inputs/parameters_scenario1b.csv')
+parameters = pd.read_csv('results/homogeneous/inputs/parameters_scenario1a.csv')
 
 # Import initial conditions
-initial_conditions = pd.read_csv('homogeneous/inputs/parameters_IC.csv')
+initial_conditions = pd.read_csv('results/homogeneous/inputs/parameters_IC.csv')
 y0 = initial_conditions.iloc[:,:].values[0]
 
 # Time vector
@@ -20,9 +20,9 @@ t_step = 1
 t = np.arange(t_start, t_end, t_step)
 
 # Import disease parameters
-sarscov2 = pd.read_csv('homogeneous/inputs/parameters_sarscov2.csv')
-ebola = pd.read_csv('homogeneous/inputs/parameters_ebola.csv')
-influenza = pd.read_csv('homogeneous/inputs/parameters_influenza.csv')
+sarscov2 = pd.read_csv('results/homogeneous/inputs/parameters_sarscov2.csv')
+ebola = pd.read_csv('results/homogeneous/inputs/parameters_ebola.csv')
+influenza = pd.read_csv('results/homogeneous/inputs/parameters_influenza.csv')
 
 # Initialise results dataframe
 df_results = pd.DataFrame(columns=['pathogen','memory_window','behaviour_function','r','alpha','vaccine_efficacy','final_cases','final_deaths','final_vaccinated','epidemic_duration'])

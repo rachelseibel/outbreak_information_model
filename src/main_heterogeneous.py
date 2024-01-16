@@ -9,10 +9,10 @@ from SEIRV_model_heterogeneous import SEIRV_model_heterogeneous, event, new_day_
 from memory_window import memory_window_heterogeneous
 
 # Import simulation parameters
-parameters = pd.read_csv('heterogeneous/inputs/parameters_scenario4b_contributions.csv')
+parameters = pd.read_csv('results/heterogeneous/inputs/parameters_scenario1.csv')
 
 # Import initial conditions
-initial_conditions = pd.read_csv('heterogeneous/inputs/parameters_IC.csv')
+initial_conditions = pd.read_csv('results/heterogeneous/inputs/parameters_IC.csv')
 # By field name, convert str to int array and append to y0
 y0 = []
 for i in range(len(initial_conditions.columns)):
@@ -35,9 +35,9 @@ t_step = 1
 t = np.arange(t_start, t_end, t_step)
 
 # Import disease parameters
-sarscov2 = pd.read_csv('heterogeneous/inputs/parameters_sarscov2.csv')
-ebola = pd.read_csv('heterogeneous/inputs/parameters_ebola.csv')
-influenza = pd.read_csv('heterogeneous/inputs/parameters_influenza.csv')
+sarscov2 = pd.read_csv('results/heterogeneous/inputs/parameters_sarscov2.csv')
+ebola = pd.read_csv('results/heterogeneous/inputs/parameters_ebola.csv')
+influenza = pd.read_csv('results/heterogeneous/inputs/parameters_influenza.csv')
 
 # Initialise results dataframe
 df_results = pd.DataFrame(columns=['pathogen','split','memory_window','behaviour_function','r','alpha','vaccine_efficacy','final_cases','final_deaths','final_vaccinated','epidemic_duration'])
