@@ -1,6 +1,6 @@
 # Outbreak Information Model
 
-This repository contains the code for the outbreak information model (OIM) described in the pre-print "A model for outbreak information management in public health" by [R. Seibel](https://warwick.ac.uk/fac/sci/mathsys/people/students/mathsysii/seibel/), [M. Tildesley](https://warwick.ac.uk/fac/sci/lifesci/people/mtildesley/) and [E. Hill](https://edmhill.github.io) (2024). The model is implemented in Python 3.11.7 and can be used to deterministically simulate the spread of a human infectious disease in a population given real-time awareness of intervention effectiveness. The model is described in detail in the pre-print, which can be found [medarxiv link here].
+This repository contains the code for the outbreak information model (OIM) described in the pre-print "A model for outbreak information management in public health" by [R. Seibel](https://warwick.ac.uk/fac/sci/mathsys/people/students/mathsysii/seibel/), [M. Tildesley](https://warwick.ac.uk/fac/sci/lifesci/people/mtildesley/) and [E. Hill](https://edmhill.github.io) (2024). The model is implemented in Python 3.11.7 and can be used to deterministically simulate the spread of a human infectious disease in a population given real-time awareness of intervention effectiveness. The model is described in detail in the pre-print, which can be found [medarxiv pre-print to be linked here upon availability].
 
 ## To run the model:
 1. Clone the repository
