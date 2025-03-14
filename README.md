@@ -38,11 +38,11 @@ The model outputs a number of files, which are saved in the "outputs" folder for
     * `E`: The number of exposed, unvaccinated individuals on day t
     * `I`: The number of infectious, unvaccinated individuals on day t
     * `R`: The number of recovered, unvaccinated individuals on day t
-    * `H`: The number of hospitalised, unvaccinated individuals on day t
+    * `PD`: The number of pre-death, unvaccinated individuals on day t
     * `Sv`: The number of susceptible, vaccinated individuals on day t
     * `Ev`: The number of exposed, vaccinated individuals on day t
     * `Iv`: The number of infectious, vaccinated individuals on day t
     * `Rv`: The number of recovered, vaccinated individuals on day t
-    * `Hv`: The number of hospitalised, vaccinated individuals on day t
+    * `PDv`: The number of pre-death, vaccinated individuals on day t
     * `C`: The number of cumulative cases in unvaccinated individuals on day t
     * `Cv`: The number of cumulative cases in vaccinated individuals on day t
