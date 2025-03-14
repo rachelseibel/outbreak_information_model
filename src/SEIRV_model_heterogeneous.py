@@ -13,12 +13,12 @@ def SEIRV_model_heterogeneous(t, y, df):
     E = y[num_groups:(2*num_groups)]
     I = y[2*num_groups:(3*num_groups)]
     R = y[3*num_groups:(4*num_groups)]
-    H = y[4*num_groups:(5*num_groups)]
+    PD = y[4*num_groups:(5*num_groups)]
     Sv = y[5*num_groups:(6*num_groups)]
     Ev = y[6*num_groups:(7*num_groups)]
     Iv = y[7*num_groups:(8*num_groups)]
     Rv = y[8*num_groups:(9*num_groups)]
-    Hv = y[9*num_groups:(10*num_groups)]
+    PDv = y[9*num_groups:(10*num_groups)]
     C = y[10*num_groups:(11*num_groups)]
     Cv = y[11*num_groups:(12*num_groups)]
     
@@ -26,19 +26,19 @@ def SEIRV_model_heterogeneous(t, y, df):
     r = np.array(r.strip(']').strip('[').split(', ')).astype(float)
 
     # Total population
-    N = S.sum() + E.sum() + I.sum() + R.sum() + H.sum() + Sv.sum() + Ev.sum() + Iv.sum() + Rv.sum() + Hv.sum()
+    N = S.sum() + E.sum() + I.sum() + R.sum() + PD.sum() + Sv.sum() + Ev.sum() + Iv.sum() + Rv.sum() + PDv.sum()
 
     # Initialise the differential equations
     dSdt = [0]*num_groups
     dEdt = [0]*num_groups
     dIdt = [0]*num_groups
     dRdt = [0]*num_groups
-    dHdt = [0]*num_groups
+    dPDdt = [0]*num_groups
     dSvdt = [0]*num_groups
     dEvdt = [0]*num_groups
     dIvdt = [0]*num_groups
     dRvdt = [0]*num_groups
-    dHvdt = [0]*num_groups
+    dPDvdt = [0]*num_groups
     dCdt = [0]*num_groups
     dCvdt = [0]*num_groups
 
@@ -50,7 +50,7 @@ def SEIRV_model_heterogeneous(t, y, df):
                 v[i] = 0
             else:
                 pass
-        behaviour, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory = update_vaccine_uptake_rate(t, td, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory, m, behaviour_function, r, alpha, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv, C, Cv)
+        behaviour, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory = update_vaccine_uptake_rate(t, td, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory, m, behaviour_function, r, alpha, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv, C, Cv)
 
         for i in range(num_groups):
             if (S[i] + E[i] + R[i]) < 10:
@@ -77,41 +77,41 @@ def SEIRV_model_heterogeneous(t, y, df):
     for i in range(num_groups):
         # Check if elig/aliv_elig is zero or NaN
         if (S[i] < 10) or ((S[i] + E[i] + R[i]) < 10) or (r[i]+alpha == 0):
-            dSdt[i] = -foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*S[i]
-            dEdt[i] = foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*S[i] - sigma*E[i]
+            dSdt[i] = -foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*S[i]
+            dEdt[i] = foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*S[i] - sigma*E[i]
             dIdt[i] = sigma*E[i] - gamma*I[i]
             dRdt[i] = (1-d)*gamma*I[i]
-            dHdt[i] = d*gamma*I[i]
+            dPDdt[i] = d*gamma*I[i]
             # Equation for cumulative infectious
             dCdt[i] = sigma*E[i]
-            # dCdt[i] = foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*S[i]
+            # dCdt[i] = foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*S[i]
             # Equations for the vaccinated population
-            dSvdt[i] = -(1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*Sv[i]
-            dEvdt[i] = (1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*Sv[i] - sigma*Ev[i]
+            dSvdt[i] = -(1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*Sv[i]
+            dEvdt[i] = (1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*Sv[i] - sigma*Ev[i]
             dIvdt[i] = sigma*Ev[i] - gamma*Iv[i]
             dRvdt[i] = (1-(1-vaccine_efficacy)*d)*gamma*Iv[i]
-            dHvdt[i] = (1-vaccine_efficacy)*d*gamma*Iv[i]
+            dPDvdt[i] = (1-vaccine_efficacy)*d*gamma*Iv[i]
             # Equation for cumulative infectious
             dCvdt[i] = sigma*Ev[i]
-            # dCvdt[i] = (1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*Sv[i]
+            # dCvdt[i] = (1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*Sv[i]
         else:
-            dSdt[i] = -foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*S[i] - v[i]*S[i]
-            dEdt[i] = foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*S[i] - sigma*E[i] - v[i]*E[i]
+            dSdt[i] = -foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*S[i] - v[i]*S[i]
+            dEdt[i] = foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*S[i] - sigma*E[i] - v[i]*E[i]
             dIdt[i] = sigma*E[i] - gamma*I[i]
             dRdt[i] = (1-d)*gamma*I[i] - v[i]*R[i]
-            dHdt[i] = d*gamma*I[i]
+            dPDdt[i] = d*gamma*I[i]
             # Equation for cumulative infectious
             dCdt[i] = sigma*E[i]
-            # dCdt[i] = foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*S[i]
+            # dCdt[i] = foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*S[i]
             # Equations for the vaccinated population
-            dSvdt[i] = -(1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*Sv[i] + v[i]*S[i]
-            dEvdt[i] = (1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*Sv[i] - sigma*Ev[i] + v[i]*E[i]
+            dSvdt[i] = -(1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*Sv[i] + v[i]*S[i]
+            dEvdt[i] = (1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*Sv[i] - sigma*Ev[i] + v[i]*E[i]
             dIvdt[i] = sigma*Ev[i] - gamma*Iv[i]
             dRvdt[i] = (1-(1-vaccine_efficacy)*d)*gamma*Iv[i] + v[i]*R[i]
-            dHvdt[i] = (1-vaccine_efficacy)*d*gamma*Iv[i]
+            dPDvdt[i] = (1-vaccine_efficacy)*d*gamma*Iv[i]
             # Equation for cumulative infectious
             dCvdt[i] = sigma*Ev[i]
-            # dCvdt[i] = (1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)*Sv[i]
+            # dCvdt[i] = (1-vaccine_efficacy)*foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)*Sv[i]
 
     # Create array of differential equations
     diffeqs = [0]*(12*num_groups)
@@ -119,12 +119,12 @@ def SEIRV_model_heterogeneous(t, y, df):
     diffeqs[num_groups:(2*num_groups)] = dEdt
     diffeqs[2*num_groups:(3*num_groups)] = dIdt
     diffeqs[3*num_groups:(4*num_groups)] = dRdt
-    diffeqs[4*num_groups:(5*num_groups)] = dHdt
+    diffeqs[4*num_groups:(5*num_groups)] = dPDdt
     diffeqs[5*num_groups:(6*num_groups)] = dSvdt
     diffeqs[6*num_groups:(7*num_groups)] = dEvdt
     diffeqs[7*num_groups:(8*num_groups)] = dIvdt
     diffeqs[8*num_groups:(9*num_groups)] = dRvdt
-    diffeqs[9*num_groups:(10*num_groups)] = dHvdt
+    diffeqs[9*num_groups:(10*num_groups)] = dPDvdt
     diffeqs[10*num_groups:(11*num_groups)] = dCdt
     diffeqs[11*num_groups:(12*num_groups)] = dCvdt
 
@@ -134,7 +134,7 @@ def SEIRV_model_heterogeneous(t, y, df):
 def event(t, y, df):
     # Calculate num_groups
     num_groups = int(len(y)/12)
-    # Hetermine the number of active infections (E + Ev + I + Iv)
+    # Determine the number of active infections (E + Ev + I + Iv)
     active_infs = 0
     for i in range(num_groups):
         active_infs += y[num_groups+i] + y[6*num_groups+i] + y[2*num_groups+i] + y[7*num_groups+i]
@@ -155,12 +155,12 @@ def new_day_event(t, y, df):
     E = y[num_groups:(2*num_groups)]
     I = y[2*num_groups:(3*num_groups)]
     R = y[3*num_groups:(4*num_groups)]
-    H = y[4*num_groups:(5*num_groups)]
+    PD = y[4*num_groups:(5*num_groups)]
     Sv = y[5*num_groups:(6*num_groups)]
     Ev = y[6*num_groups:(7*num_groups)]
     Iv = y[7*num_groups:(8*num_groups)]
     Rv = y[8*num_groups:(9*num_groups)]
-    Hv = y[9*num_groups:(10*num_groups)]
+    PDv = y[9*num_groups:(10*num_groups)]
     C = y[10*num_groups:(11*num_groups)]
     Cv = y[11*num_groups:(12*num_groups)]
     
@@ -176,7 +176,7 @@ def new_day_event(t, y, df):
         if behaviour_function == 'no_vaccine':
             v = [0]*num_groups
         else:
-            behaviour, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory = update_vaccine_uptake_rate(t, td, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory, m, behaviour_function, r, alpha, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv, C, Cv)
+            behaviour, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory = update_vaccine_uptake_rate(t, td, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory, m, behaviour_function, r, alpha, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv, C, Cv)
 
             for i in range(num_groups):
                 if (S[i] + E[i] + R[i]) < 10:
@@ -203,7 +203,7 @@ def new_day_event(t, y, df):
 
 new_day_event.previous_time = 0
 
-def update_vaccine_uptake_rate(t, td, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory, m, behaviour_function, r, alpha, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv, C, Cv):
+def update_vaccine_uptake_rate(t, td, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory, m, behaviour_function, r, alpha, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv, C, Cv):
 
     # Initialise the cases and deaths within each group
     ucases_within = [0]*len(S)
@@ -215,14 +215,14 @@ def update_vaccine_uptake_rate(t, td, ucases_within_memory, udeaths_within_memor
     for i in range(len(S)):
         cases_within[i] = C[i] + Cv[i]
         ucases_within[i] = C[i]
-        deaths_within[i] = H[i] + Hv[i]
-        udeaths_within[i] = H[i]
+        deaths_within[i] = PD[i] + PDv[i]
+        udeaths_within[i] = PD[i]
     
     # Calculate the number of cases and deaths for today
     cases = C.sum() + Cv.sum()
     ucases = C.sum()
-    deaths = H.sum() + Hv.sum()
-    udeaths = H.sum()
+    deaths = PD.sum() + PDv.sum()
+    udeaths = PD.sum()
 
     # Memory window implementation
     if (m != 0) | (alpha != 0):
@@ -253,11 +253,11 @@ def update_vaccine_uptake_rate(t, td, ucases_within_memory, udeaths_within_memor
             print('Error: behaviour function not found')
     return b, ucases_within_memory, udeaths_within_memory, ucases_memory, udeaths_memory, cases_within_memory, deaths_within_memory, cases_memory, deaths_memory
 
-def alive(S, E, I, R, H, Sv, Ev, Iv, Rv, Hv):
+def alive(S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv):
     # Calculate the proportion of the population alive
     aliv = S.sum() + E.sum() + I.sum() + R.sum() + Sv.sum() + Ev.sum() + Iv.sum() + Rv.sum()
     return aliv
 
-def foi(beta, vaccine_efficacy, S, E, I, R, H, Sv, Ev, Iv, Rv, Hv):
-    FOI = beta*(I.sum()+Iv.sum())/alive(S, E, I, R, H, Sv, Ev, Iv, Rv, Hv)
+def foi(beta, vaccine_efficacy, S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv):
+    FOI = beta*(I.sum()+Iv.sum())/alive(S, E, I, R, PD, Sv, Ev, Iv, Rv, PDv)
     return FOI

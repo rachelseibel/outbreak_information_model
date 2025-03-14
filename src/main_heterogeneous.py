@@ -41,7 +41,7 @@ influenza = pd.read_csv('results/heterogeneous/inputs/parameters_influenza.csv')
 
 # Initialise results dataframe
 df_results = pd.DataFrame(columns=['pathogen','split','memory_window','behaviour_function','r','alpha','vaccine_efficacy','final_cases','final_deaths','final_vaccinated','epidemic_duration'])
-df_temporal = pd.DataFrame(columns=['pathogen','split','memory_window','behaviour_function','r','alpha','vaccine_efficacy','t','S','E','I','R','H','Sv','Ev','Iv','Rv','Hv','C','Cv'])
+df_temporal = pd.DataFrame(columns=['pathogen','split','memory_window','behaviour_function','r','alpha','vaccine_efficacy','t','S','E','I','R','PD','Sv','Ev','Iv','Rv','PDv','C','Cv'])
 
 # Run SEIRV_model over range of parameters
 for i in range(len(parameters)):
@@ -167,12 +167,12 @@ for i in range(len(parameters)):
             'E': [[sol.y[3][j], sol.y[4][j], sol.y[5][j]]],
             'I': [[sol.y[6][j], sol.y[7][j], sol.y[8][j]]],
             'R': [[sol.y[9][j], sol.y[10][j], sol.y[11][j]]],
-            'H': [[sol.y[12][j], sol.y[13][j], sol.y[14][j]]],
+            'PD': [[sol.y[12][j], sol.y[13][j], sol.y[14][j]]],
             'Sv': [[sol.y[15][j], sol.y[16][j], sol.y[17][j]]],
             'Ev': [[sol.y[18][j], sol.y[19][j], sol.y[20][j]]],
             'Iv': [[sol.y[21][j], sol.y[22][j], sol.y[23][j]]],   
             'Rv': [[sol.y[24][j], sol.y[25][j], sol.y[26][j]]],
-            'Hv': [[sol.y[27][j], sol.y[28][j], sol.y[29][j]]],
+            'PDv': [[sol.y[27][j], sol.y[28][j], sol.y[29][j]]],
             'C': [[sol.y[30][j], sol.y[31][j], sol.y[32][j]]],
             'Cv': [[sol.y[33][j], sol.y[34][j], sol.y[35][j]]]
         }, index=[file_size])
